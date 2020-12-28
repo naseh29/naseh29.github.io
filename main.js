@@ -5,6 +5,7 @@ const calculator = {
     operator: null,
 };
 
+
 function inputDigit(digit) {
     const { displayValue, waitingForSecondOperand } = calculator;
     if (waitingForSecondOperand === true) {
@@ -13,6 +14,22 @@ function inputDigit(digit) {
     } else {
         calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
     }
+}
+
+function pangkat() {
+    calculator.displayValue = Math.pow(calculator.displayValue, 2);
+}
+
+function sin() {
+    calculator.displayValue = Math.sin(calculator.displayValue);
+}
+
+function cos() {
+    calculator.displayValue = Math.cos(calculator.displayValue);
+}
+
+function tan() {
+    calculator.displayValue = Math.tan(calculator.displayValue);
 }
 
 function inputDecimal(dot) {
@@ -37,7 +54,7 @@ function handleOperator(nextOperator) {
         calculator.firstOperand = inputValue;
     } else if (operator) {
         const result = calculate(firstOperand, inputValue, operator);
-        calculator.displayValue = '${parseFloat(result.toFixed(7))}';
+        calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
         calculator.firstOperand = result;
     }
     calculator.waitingForSecondOperand = true;
@@ -69,33 +86,32 @@ function updateDisplay() {
     display.value = calculator.displayValue;
 }
 
-updateDisplay() {
-    const keys = document.querySelector('.calculator-keys');
-    keys.addEventListener('click', event => {
-        const { target } = event;
-        const { value } = target;
-        if (!target.matches('button')) {
-            return;
-        }
-        switch (value) {
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-            case '=':
-                handleOperator(value);
-                break;
-            case '.':
-                inputDecimal(value);
-                break;
-            case 'all-clear':
-                resetCalculator();
-                break;
-            default:
-                if (Number.isInteger(parseFloat(value))) {
-                    inputDigit(value);
-                }
-        }
-        updateDisplay();
-    });
-}
+updateDisplay();
+const keys = document.querySelector('.calculator-keys');
+keys.addEventListener('click', event => {
+    const { target } = event;
+    const { value } = target;
+    if (!target.matches('button')) {
+        return;
+    }
+    switch (value) {
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '=':
+            handleOperator(value);
+            break;
+        case '.':
+            inputDecimal(value);
+            break;
+        case 'all-clear':
+            resetCalculator();
+            break;
+        default:
+            if (Number.isInteger(parseFloat(value))) {
+                inputDigit(value);
+            }
+    }
+    updateDisplay();
+});
